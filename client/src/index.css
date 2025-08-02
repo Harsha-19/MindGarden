@@ -109,8 +109,10 @@
   .category-action { background: linear-gradient(135deg, #ef4444, #dc2626); }
   .category-rpg { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
   .category-strategy { background: linear-gradient(135deg, #6366f1, #4338ca); }
-  .category-simulation { background: linear-gradient(135deg, #10b981, #059669); }
-  .category-indie { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+  .category-racing { background: linear-gradient(135deg, #f97316, #ea580c); }
+  .category-sports { background: linear-gradient(135deg, #10b981, #059669); }
+  .category-adventure { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+  .category-indie { background: linear-gradient(135deg, #a855f7, #9333ea); }
   .category-horror { background: linear-gradient(135deg, #7c2d12, #451a03); }
   .category-arcade { background: linear-gradient(135deg, #f59e0b, #d97706); }
 }
