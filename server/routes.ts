@@ -76,6 +76,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/games/:id', async (req, res) => {
     try {
       const gameId = parseInt(req.params.id);
+      
+      if (isNaN(gameId)) {
+        return res.status(400).json({ message: "Invalid game ID" });
+      }
+      
       const game = await storage.getGameById(gameId);
       
       if (!game) {

@@ -14,7 +14,7 @@ interface FilterBarProps {
 }
 
 const categories = [
-  { value: "", label: "All Categories", icon: "🎮" },
+  { value: "all", label: "All Categories", icon: "🎮" },
   { value: "action", label: "Action", icon: "⚔️" },
   { value: "rpg", label: "RPG", icon: "🧙‍♂️" },
   { value: "strategy", label: "Strategy", icon: "🧠" },
@@ -25,7 +25,7 @@ const categories = [
 ];
 
 const priceRanges = [
-  { value: "", label: "Any Price" },
+  { value: "any", label: "Any Price" },
   { value: "0-5", label: "Under $5" },
   { value: "5-15", label: "$5 - $15" },
   { value: "15-30", label: "$15 - $30" },
@@ -41,24 +41,32 @@ const sortOptions = [
 ];
 
 export default function FilterBar({ onFilter }: FilterBarProps) {
-  const [category, setCategory] = useState("");
-  const [priceRange, setPriceRange] = useState("");
+  const [category, setCategory] = useState("all");
+  const [priceRange, setPriceRange] = useState("any");
   const [sortBy, setSortBy] = useState("newest");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   const applyFilters = () => {
-    const [minPrice, maxPrice] = priceRange.split("-");
+    let minPrice = "";
+    let maxPrice = "";
+    
+    if (priceRange !== "any") {
+      const [min, max] = priceRange.split("-");
+      minPrice = min || "";
+      maxPrice = max === "+" ? "" : max || "";
+    }
+    
     onFilter({
-      category,
-      minPrice: minPrice || "",
-      maxPrice: maxPrice === "+" ? "" : maxPrice || "",
+      category: category === "all" ? "" : category,
+      minPrice,
+      maxPrice,
       sortBy,
     });
   };
 
   const clearFilters = () => {
-    setCategory("");
-    setPriceRange("");
+    setCategory("all");
+    setPriceRange("any");
     setSortBy("newest");
     onFilter({
       category: "",
@@ -68,7 +76,7 @@ export default function FilterBar({ onFilter }: FilterBarProps) {
     });
   };
 
-  const hasActiveFilters = category || priceRange || sortBy !== "newest";
+  const hasActiveFilters = category !== "all" || priceRange !== "any" || sortBy !== "newest";
 
   return (
     <div className="bg-card border-b border-border py-4 sticky top-16 z-40 backdrop-blur-md bg-opacity-95">
@@ -149,21 +157,27 @@ export default function FilterBar({ onFilter }: FilterBarProps) {
           {/* Active Filters Display */}
           {hasActiveFilters && (
             <div className="mt-4 flex flex-wrap gap-2">
-              {category && (
+              {category && category !== "all" && (
                 <Badge variant="secondary" className="flex items-center gap-1">
                   {categories.find(c => c.value === category)?.icon} {categories.find(c => c.value === category)?.label}
                   <X 
                     className="w-3 h-3 ml-1 cursor-pointer hover:text-destructive" 
-                    onClick={() => setCategory("")}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCategory("all");
+                    }}
                   />
                 </Badge>
               )}
-              {priceRange && (
+              {priceRange && priceRange !== "any" && (
                 <Badge variant="secondary" className="flex items-center gap-1">
                   💰 {priceRanges.find(p => p.value === priceRange)?.label}
                   <X 
                     className="w-3 h-3 ml-1 cursor-pointer hover:text-destructive" 
-                    onClick={() => setPriceRange("")}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setPriceRange("any");
+                    }}
                   />
                 </Badge>
               )}
@@ -172,7 +186,10 @@ export default function FilterBar({ onFilter }: FilterBarProps) {
                   {sortOptions.find(s => s.value === sortBy)?.label}
                   <X 
                     className="w-3 h-3 ml-1 cursor-pointer hover:text-destructive" 
-                    onClick={() => setSortBy("newest")}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setSortBy("newest");
+                    }}
                   />
                 </Badge>
               )}
