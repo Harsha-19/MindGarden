@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { GameWithSeller } from "@shared/schema";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Gamepad2 } from "lucide-react";
 
 export default function Home() {
   const { toast } = useToast();
@@ -76,7 +77,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-background">
       <Header 
         onSearch={handleSearch}
         onSellGame={() => setShowSellModal(true)}
@@ -85,17 +86,24 @@ export default function Home() {
       
       {/* Featured Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="relative h-64 md:h-80 rounded-xl overflow-hidden bg-gradient-to-r from-purple-900 to-blue-900 mb-8">
-          <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+        <div className="relative h-64 md:h-80 rounded-xl overflow-hidden bg-gradient-to-br from-purple-900/80 via-blue-900/60 to-green-900/40 mb-8 gaming-card">
+          <div className="absolute inset-0 bg-black/20"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent"></div>
           <div className="relative z-10 h-full flex items-center">
             <div className="ml-8 max-w-lg">
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 gaming-title drop-shadow-lg">
                 Discover Amazing Games
               </h1>
-              <p className="text-xl text-gray-200 mb-6">
+              <p className="text-xl text-gray-200 mb-6 drop-shadow-md">
                 Buy and sell digital games from indie developers to AAA studios
               </p>
             </div>
+          </div>
+          {/* Gaming particles effect */}
+          <div className="absolute inset-0 opacity-20">
+            <div className="absolute w-2 h-2 bg-primary rounded-full animate-pulse" style={{top: '20%', left: '80%'}}></div>
+            <div className="absolute w-1 h-1 bg-accent rounded-full animate-pulse" style={{top: '60%', left: '85%', animationDelay: '1s'}}></div>
+            <div className="absolute w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse" style={{top: '40%', left: '90%', animationDelay: '2s'}}></div>
           </div>
         </div>
       </section>
@@ -103,15 +111,15 @@ export default function Home() {
       {/* Games Grid */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-primary mb-2">Latest Games</h2>
-          <p className="text-slate-600">Discover new and exciting games from our community</p>
+          <h2 className="text-2xl lg:text-3xl font-bold gaming-title mb-2">Latest Games</h2>
+          <p className="text-muted-foreground">Discover new and exciting games from our community</p>
         </div>
 
         {gamesLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="gaming-grid">
             {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                <Skeleton className="h-48 w-full" />
+              <div key={i} className="gaming-card">
+                <Skeleton className="h-48 w-full rounded-t-xl" />
                 <div className="p-4 space-y-3">
                   <Skeleton className="h-6 w-3/4" />
                   <Skeleton className="h-4 w-full" />
@@ -125,7 +133,7 @@ export default function Home() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="gaming-grid">
             {games.map((game) => (
               <GameCard key={game.id} game={game} />
             ))}
@@ -134,7 +142,10 @@ export default function Home() {
 
         {!gamesLoading && games.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-slate-600 text-lg">No games found. Try adjusting your search or filters.</p>
+            <div className="gaming-card max-w-md mx-auto p-8">
+              <Gamepad2 className="w-16 h-16 text-muted-foreground mx-auto mb-4 opacity-50" />
+              <p className="text-muted-foreground text-lg">No games found. Try adjusting your search or filters.</p>
+            </div>
           </div>
         )}
       </main>
